@@ -14,6 +14,32 @@ class UserService{
 
         return true
     }
+
+    async GetUserByEmail(email){
+        const {data,error} = await supabase.from("users").select("*").eq("email",email) // .single() cuando SE que solo hay 1
+
+        if (error){
+            console.error(error)
+            throw new Error(error)
+        }
+
+        const user = data[0]
+
+        return user
+    }
+
+        async GetUserById(user_id){
+        const {data,error} = await supabase.from("users").select("*").eq("id",user_id) // .single() cuando SE que solo hay 1
+
+        if (error){
+            console.error(error)
+            throw new Error(error)
+        }
+
+        const user = data[0]
+
+        return user
+    }
 }
 
 const userService = new UserService();
