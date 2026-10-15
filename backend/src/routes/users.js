@@ -1,6 +1,6 @@
 import express from "express"
-import { BearerTokenGlobal } from "../middlewares/auth";
-import userService from "../services/user";
+import { BearerTokenGlobal } from "../middlewares/auth.js";
+import userService from "../services/user.js";
 
 const router = express.Router();
 
