@@ -25,4 +25,24 @@ router.post("/users", BearerTokenGlobal, async (req,res)=>{
 
 })
 
+router.get("/users", BearerTokenGlobal, async (req,res) => {
+  const email = req.query.email;
+  const user_id = req.query.user_id;
+
+  if (!email && !user_id){
+    res.status(406)
+  }
+  let userEmail
+  let userId
+
+  if (email){
+    userEmail = await userService.GetUserByEmail(email)
+  }
+  if (user_id){
+    userId = await userService.GetUserById(user_id)
+  }
+
+  res.json({user_by_id:userId, user_by_email:userEmail})
+})
+
 export default router;
