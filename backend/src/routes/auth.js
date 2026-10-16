@@ -1,10 +1,10 @@
 import express from "express";
 import supabase from "../clients/vms_supabase.js";
-import { SupabaseJWT } from "../middlewares/auth.js";
+import { BearerTokenGlobal, SupabaseJWT } from "../middlewares/auth.js";
 
 const router = express.Router()
 
-router.post("/login", async (req,res) => {
+router.post("/login",BearerTokenGlobal, async (req,res) => {
     const email = req.body?.email;
     const password = req.body?.password;
 
@@ -26,7 +26,7 @@ router.post("/login", async (req,res) => {
     })
 })
 
-router.post("/refresh", async (req,res) => {
+router.post("/refresh", BearerTokenGlobal, async (req,res) => {
     const refresh_token = req.body?.refresh_token;
 
     if (!refresh_token){
