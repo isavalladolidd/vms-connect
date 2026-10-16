@@ -19,7 +19,7 @@ router.post("/users", SupabaseJWT, async (req,res)=>{
     res.status(406).json("Role not supported")
   }
 
-  const caller = await userService.GetUserByEmail(req.supabase, req.user.email)
+  const caller = await userService.GetUserByEmail(req.user.email)
   if (caller?.user_rol !== "admin"){
     return res.status(403).json({ error: "Forbidden" })
   }
