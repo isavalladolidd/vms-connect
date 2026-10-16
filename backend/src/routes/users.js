@@ -1,11 +1,11 @@
 import express from "express"
-import { BearerTokenGlobal } from "../middlewares/auth.js";
+import { BearerTokenGlobal, SupabaseJWT } from "../middlewares/auth.js";
 import userService from "../services/user.js";
 
 const router = express.Router();
 
 
-router.post("/users", BearerTokenGlobal, async (req,res)=>{
+router.post("/users", SupabaseJWT, async (req,res)=>{
   const username = req.body.username;
   const email = req.body.email;
   const number = req.body.number;
@@ -19,13 +19,17 @@ router.post("/users", BearerTokenGlobal, async (req,res)=>{
     res.status(406).json("Role not supported")
   }
 
+  const caller = await userService.GetUserByEmail(req.supabase, req.user.email)
+  if (caller?.user_rol !== "admin"){
+    return res.status(403).json({ error: "Forbidden" })
+  }
   const response = await userService.CreateUser(username,email,number,name,lastname,user_role)
 
   res.json({created:response})
 
 })
 
-router.get("/users", BearerTokenGlobal, async (req,res) => {
+router.get("/users", SupabaseJWT, async (req,res) => {
   const email = req.query.email;
   const user_id = req.query.user_id;
 
