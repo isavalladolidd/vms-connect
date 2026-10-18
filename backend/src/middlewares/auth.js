@@ -1,4 +1,5 @@
-import supabase, { createUserClient } from "../clients/vms_supabase.js"
+// documentation: docs/backend/middlewares.md
+import supabase from "../clients/vms_supabase.js"
 
 const BearerTokenGlobal = (req,res, next)=>{
     const authHeader = req.headers["authorization"];
@@ -39,8 +40,9 @@ const SupabaseJWT = async (req,res,next)=>{
     });
   }
 
+  // Authenticated user metadata; services receive it to build their own createUserClient
+  req.auth = { user: data.user, accessToken: token };
   req.user = data.user;
-  req.supabase = createUserClient(token);
 
   next();
 }

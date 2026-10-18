@@ -1,3 +1,4 @@
+// documentation: docs/backend/app-and-server.md
 import "dotenv/config";
 import { PORT } from "./config/config.js";
 import express from 'express';

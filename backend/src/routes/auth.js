@@ -1,3 +1,4 @@
+// documentation: docs/backend/routes-auth.md
 import express from "express";
 import supabase from "../clients/vms_supabase.js";
 import { BearerTokenGlobal, SupabaseJWT } from "../middlewares/auth.js";

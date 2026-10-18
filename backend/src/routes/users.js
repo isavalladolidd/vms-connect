@@ -1,3 +1,4 @@
+// documentation: docs/backend/routes-users.md
 import express from "express"
 import { BearerTokenGlobal, SupabaseJWT } from "../middlewares/auth.js";
 import userService from "../services/user.js";
@@ -16,14 +17,15 @@ router.post("/users", SupabaseJWT, async (req,res)=>{
   const ROLES = ["user", "admin", "employee"]
 
   if (!ROLES.includes(user_role)){
-    res.status(406).json("Role not supported")
+    return res.status(406).json("Role not supported")
   }
 
-  const caller = await userService.GetUserByEmail(req.user.email)
+  // Basic backend check; the real enforcement is RLS inside the service (createUserClient)
+  const caller = await userService.GetUserByEmail(req.auth, req.user.email)
   if (caller?.user_rol !== "admin"){
     return res.status(403).json({ error: "Forbidden" })
   }
-  const response = await userService.CreateUser(username,email,number,name,lastname,user_role)
+  const response = await userService.CreateUser(req.auth,username,email,number,name,lastname,user_role)
 
   res.json({created:response})
 
@@ -34,16 +36,16 @@ router.get("/users", SupabaseJWT, async (req,res) => {
   const user_id = req.query.user_id;
 
   if (!email && !user_id){
-    res.status(406)
+    return res.status(406).json({ error: "email or user_id is required" })
   }
   let userEmail
   let userId
 
   if (email){
-    userEmail = await userService.GetUserByEmail(email)
+    userEmail = await userService.GetUserByEmail(req.auth, email)
   }
   if (user_id){
-    userId = await userService.GetUserById(user_id)
+    userId = await userService.GetUserById(req.auth, user_id)
   }
 
   res.json({user_by_id:userId, user_by_email:userEmail})

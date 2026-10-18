@@ -1,3 +1,4 @@
+// documentation: docs/backend/supabase-clients.md
 import { createClient} from "@supabase/supabase-js";
 
 const SUPABASE_URL = process.env.SUPABASE_URL
@@ -22,7 +23,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     auth: SERVER_AUTH_OPTIONS,
 })
 
-// Cliente por request que manda el JWT del usuario, asi RLS aplica como ese usuario
+// Per-request client that sends the user's JWT, so RLS applies as that user
 function createUserClient(accessToken){
     return createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
         auth: SERVER_AUTH_OPTIONS,
